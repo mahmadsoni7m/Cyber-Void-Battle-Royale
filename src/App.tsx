@@ -28,7 +28,15 @@ export default function App() {
     const scene = new THREE.Scene(); scene.background = new THREE.Color(0x07101d); scene.fog = new THREE.Fog(0x07101d, 42, 155);
     const camera = new THREE.PerspectiveCamera(76, host.current.clientWidth/host.current.clientHeight, .1, 240);
     camera.position.set(0,1.7,12);
-    const renderer = new THREE.WebGLRenderer({antialias:false, powerPreference:'high-performance'});
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({antialias:false, powerPreference:'high-performance'});
+    } catch (error) {
+      console.error('Cyber Void WebGL initialization failed:', error);
+      setMessage('WEBGL ДАСТГИРӢ НАМЕШАВАД');
+      setScreen('over');
+      return;
+    }
     renderer.setPixelRatio(Math.min(devicePixelRatio,1.5)); renderer.setSize(host.current.clientWidth,host.current.clientHeight); renderer.shadowMap.enabled=false; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.25;
     host.current.innerHTML=''; host.current.appendChild(renderer.domElement);
     scene.add(new THREE.HemisphereLight(0x9bdcff,0x192033,2));
